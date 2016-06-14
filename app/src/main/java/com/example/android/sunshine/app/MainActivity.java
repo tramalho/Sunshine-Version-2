@@ -8,10 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -70,7 +68,13 @@ public class MainActivity extends ActionBarActivity {
                     "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
                     "Sun 6/29 - Sunny - 20/7"
             };
-            List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                    R.layout.list_item_forecast, R.id.list_item_forecast_textview, data);
+
+            ListView listView = (ListView) rootView.findViewById(R.id.listview_forecasts);
+            listView.setAdapter(adapter);
+
             return rootView;
         }
     }
