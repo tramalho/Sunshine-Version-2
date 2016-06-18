@@ -27,6 +27,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A ForecastFragment fragment containing a simple view.
@@ -34,6 +37,8 @@ import java.text.SimpleDateFormat;
 public class ForecastFragment extends Fragment {
 
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
+    private ArrayAdapter<String> adapter;
+    private List<String> whetherList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,11 @@ public class ForecastFragment extends Fragment {
                 "Sun 6/29 - Sunny - 20/7"
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                R.layout.list_item_forecast, R.id.list_item_forecast_textview, data);
+        whetherList = new ArrayList<>();
+        whetherList.addAll(Arrays.asList(data));
+
+        adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.list_item_forecast, R.id.list_item_forecast_textview, whetherList);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecasts);
         listView.setAdapter(adapter);
@@ -99,7 +107,7 @@ public class ForecastFragment extends Fragment {
             BufferedReader reader = null;
 
             // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
+            String forecastJsonStr;
 
             String format = "json";
             String units = "metric";
@@ -142,7 +150,9 @@ public class ForecastFragment extends Fragment {
                     // Nothing to do.
                     forecastJsonStr = null;
                 }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
+                if (inputStream != null) {
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                }
 
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -168,7 +178,6 @@ public class ForecastFragment extends Fragment {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attempting
                 // to parse it.
-                forecastJsonStr = null;
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -183,6 +192,13 @@ public class ForecastFragment extends Fragment {
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] strings) {
+            whetherList.clear();
+            whetherList.addAll(Arrays.asList(strings));
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -204,8 +220,7 @@ public class ForecastFragment extends Fragment {
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);
 
-        String highLowStr = roundedHigh + "/" + roundedLow;
-        return highLowStr;
+        return roundedHigh + "/" + roundedLow;
     }
 
     /**
