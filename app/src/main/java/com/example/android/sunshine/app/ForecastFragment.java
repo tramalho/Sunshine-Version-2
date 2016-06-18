@@ -68,6 +68,7 @@ public class ForecastFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_refresh){
             Toast.makeText(getActivity(), "click no menu refresh", Toast.LENGTH_SHORT).show();
+            new FetchWeatherTask().execute();
         }
 
         return super.onOptionsItemSelected(item);
