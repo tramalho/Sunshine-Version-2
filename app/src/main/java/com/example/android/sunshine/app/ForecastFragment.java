@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -93,7 +95,11 @@ public class ForecastFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_refresh) {
             Toast.makeText(getActivity(), "click no menu refresh", Toast.LENGTH_SHORT).show();
-            new FetchWeatherTask().execute("94043");
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String locationPref = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
+            new FetchWeatherTask().execute(locationPref);
 
             return true;
         }
@@ -130,8 +136,8 @@ public class ForecastFragment extends Fragment {
                 // http://openweathermap.org/API#forecast
 
                 final String FORECAST_BASE_URL =
-                        "http://api.openweathermap.org/data/2.5/forecast/daily?";
-                final String QUERY_PARAM = "q";
+                        "http://api.openweathermap.org/data/2.5/forecast/city?";
+                final String QUERY_PARAM = "id";
                 final String FORMAT_PARAM = "mode";
                 final String UNITS_PARAM = "units";
                 final String DAYS_PARAM = "cnt";
