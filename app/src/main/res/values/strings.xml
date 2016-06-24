@@ -16,16 +16,16 @@
     <string name="pref_location_default" translatable="false">3453406</string>
     <string name="pref_location_summary" >summary</string>
 
-    <string name="pref_tempeture_key" translatable="false">pref_tempeture_key</string>
-    <string name="pref_tempeture_label">Tempeture Units</string>
-    <string name="pref_tempeture_default" translatable="false">@string/metric</string>
+    <string name="pref_units_key" translatable="false">pref_units_key</string>
+    <string name="pref_units_label">Tempeture Units</string>
+    <string name="pref_tempeture_default" translatable="false">@string/pref_units_metric</string>
 
-    <string name="metric">Metric</string>
-    <string name="imperial">Imperial</string>
+    <string name="pref_units_metric">Metric</string>
+    <string name="pref_units_imperial">Imperial</string>
 
-    <string-array name="pref_tempeture_list">
-        <item>@string/metric</item>
-        <item>@string/imperial</item>
+    <string-array name="pref_units_option">
+        <item>@string/pref_units_metric</item>
+        <item>@string/pref_units_imperial</item>
     </string-array>
 
 </resources>
