@@ -9,4 +9,13 @@
         android:summary="@string/pref_location_summary"
         />
 
+    <ListPreference
+        android:key="pref_tempeture_key"
+        android:title="@string/pref_tempeture_label"
+        android:dialogTitle="@string/pref_tempeture_label"
+        android:entries="@array/pref_tempeture_list"
+        android:entryValues="@array/pref_tempeture_list"
+        android:defaultValue="@string/metric" />
+
+
 </PreferenceScreen>
