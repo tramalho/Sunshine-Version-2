@@ -13,7 +13,7 @@
 
     <string name="pref_location_key" translatable="false">pref_location_key</string>
     <string name="pref_location_label">Location</string>
-    <string name="pref_location_default" translatable="false">94043</string>
+    <string name="pref_location_default" translatable="false">3453406</string>
     <string name="pref_location_summary" >summary</string>
 
 </resources>
