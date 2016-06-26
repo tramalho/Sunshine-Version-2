@@ -96,8 +96,22 @@ public class ForecastFragment extends Fragment {
 
             return true;
         }
+        else if(item.getItemId() == R.id.action_map){
+            showMap();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showMap() {
+
+        Uri builtUri = Uri.parse("geo:0,0");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(builtUri);
+        if(intent.resolveActivity(getActivity().getPackageManager()) != null){
+            getActivity().startActivity(intent);
+        }
     }
 
     private void updateWeather() {
