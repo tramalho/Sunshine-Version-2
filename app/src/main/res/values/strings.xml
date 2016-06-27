@@ -23,6 +23,7 @@
     <string name="pref_units_metric">Metric</string>
     <string name="pref_units_imperial">Imperial</string>
     <string name="action_map">Map Location</string>
+    <string name="share">Share</string>
 
     <string-array name="pref_units_option">
         <item>@string/pref_units_metric</item>
