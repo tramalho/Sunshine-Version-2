@@ -96,22 +96,8 @@ public class ForecastFragment extends Fragment {
 
             return true;
         }
-        else if(item.getItemId() == R.id.action_map){
-            showMap();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showMap() {
-
-        Uri builtUri = Uri.parse("geo:0,0");
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(builtUri);
-        if(intent.resolveActivity(getActivity().getPackageManager()) != null){
-            getActivity().startActivity(intent);
-        }
     }
 
     private void updateWeather() {
@@ -151,7 +137,7 @@ public class ForecastFragment extends Fragment {
 
                 final String FORECAST_BASE_URL =
                         "http://api.openweathermap.org/data/2.5/forecast/daily?";
-                final String QUERY_PARAM = "id";
+                final String QUERY_PARAM = "q";
                 final String FORMAT_PARAM = "mode";
                 final String UNITS_PARAM = "units";
                 final String DAYS_PARAM = "cnt";
@@ -227,9 +213,13 @@ public class ForecastFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String[] strings) {
-            whetherList.clear();
-            whetherList.addAll(Arrays.asList(strings));
-            adapter.notifyDataSetChanged();
+            if(strings == null || strings.length < 1){
+                Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+            } else {
+                whetherList.clear();
+                whetherList.addAll(Arrays.asList(strings));
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
