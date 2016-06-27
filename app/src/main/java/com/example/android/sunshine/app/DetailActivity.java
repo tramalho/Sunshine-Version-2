@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,8 +58,8 @@ public class DetailActivity extends ActionBarActivity {
      */
     public static class DetailFragment extends Fragment {
 
-        private ShareActionProvider mShareActionProvider;
-        private TextView textview;
+        private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+        private String mForecastStr;
 
         public DetailFragment() {
         }
@@ -76,8 +77,9 @@ public class DetailActivity extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
             Intent intent = getActivity().getIntent();
             if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
-                textview = (TextView) rootView.findViewById(R.id.detail_text);
-                textview.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+                TextView textview = (TextView) rootView.findViewById(R.id.detail_text);
+                mForecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+                textview.setText(mForecastStr);
             }
 
             return rootView;
@@ -85,24 +87,26 @@ public class DetailActivity extends ActionBarActivity {
 
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            inflater.inflate(R.menu.detail, menu);
+            inflater.inflate(R.menu.detailfragment, menu);
 
             // Locate MenuItem with ShareActionProvider
             MenuItem item = menu.findItem(R.id.action_share);
 
             // Fetch and store ShareActionProvider
-            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-            sendData(textview.getText().toString());
+            ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+            if(shareActionProvider != null){
+                shareActionProvider.setShareIntent(createShareForecastIntent());
+            } else {
+                Log.d(LOG_TAG, "Share Action Provider is null?");
+            }
         }
 
-        private void sendData(String data){
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, data + " #SunshineApp");
+        private Intent createShareForecastIntent(){
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             sendIntent.setType("text/plain");
-            if (mShareActionProvider != null) {
-                mShareActionProvider.setShareIntent(sendIntent);
-            }
+            sendIntent.putExtra(Intent.EXTRA_TEXT, this.mForecastStr + " #SunshineApp");
+            return sendIntent;
         }
     }
 }
