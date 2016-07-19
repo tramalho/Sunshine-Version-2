@@ -54,6 +54,9 @@ public class WeatherContract {
         // Column with the string city name.
         public static final String COLUMN_CITY_NAME = "city_name";
 
+        public static String[] getColumns() {
+            return new String[]{_ID, COLUMN_LOCATION_SETTING, COLUMN_COORD_LAT, COLUMN_COORD_LONG, COLUMN_CITY_NAME};
+        }
     }
 
     /* Inner class that defines the table contents of the weather table */
