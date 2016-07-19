@@ -141,7 +141,10 @@ public class TestDb extends AndroidTestCase {
         // query if you like)
         TestUtilities.validateCurrentRecord("Cursor error", cursor, northPoleLocationValues);
 
+        assertFalse( "Error: More than one record returned from location query", cursor.moveToNext() );
+
         // Finally, close the cursor and database
+        cursor.close();
         db.close();
     }
 
