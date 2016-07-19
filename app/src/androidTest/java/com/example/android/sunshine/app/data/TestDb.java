@@ -117,12 +117,12 @@ public class TestDb extends AndroidTestCase {
                 this.mContext).getWritableDatabase();
 
         assertEquals(true, db.isOpen());
+
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
         ContentValues northPoleLocationValues = TestUtilities.createNorthPoleLocationValues();
 
-        // Insert ContentValues into database and get a row ID back
-        long insert = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, northPoleLocationValues);
+        long insert = insertLocation(db, northPoleLocationValues);
         assertTrue(insert > -1);
 
         // Query the database and receive a Cursor back
@@ -134,8 +134,8 @@ public class TestDb extends AndroidTestCase {
 
         // Move the cursor to a valid database row
         assertEquals(1, cursor.getCount());
-        assertTrue(cursor.moveToFirst());
-
+        
+        
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
@@ -157,6 +157,18 @@ public class TestDb extends AndroidTestCase {
     public void testWeatherTable() {
         // First insert the location, and then use the locationRowId to insert
         // the weather. Make sure to cover as many failure cases as you can.
+        SQLiteDatabase db = new WeatherDbHelper(
+                this.mContext).getWritableDatabase();
+
+        assertEquals(true, db.isOpen());
+
+        // Create ContentValues of what you want to insert
+        // (you can use the createNorthPoleLocationValues if you wish)
+        ContentValues northPoleLocationValues = TestUtilities.createNorthPoleLocationValues();
+
+
+        long insert = insertLocation(db, northPoleLocationValues);
+        assertTrue(insert > -1);
 
         // Instead of rewriting all of the code we've already written in testLocationTable
         // we can move this code to insertLocation and then call insertLocation from both
@@ -167,18 +179,34 @@ public class TestDb extends AndroidTestCase {
 
         // Create ContentValues of what you want to insert
         // (you can use the createWeatherValues TestUtilities function if you wish)
+        ContentValues weatherValues = TestUtilities.createWeatherValues(insert);
 
         // Insert ContentValues into database and get a row ID back
+        long wetherId = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, weatherValues);
 
         // Query the database and receive a Cursor back
+        Cursor cursor = db.query(WeatherContract.WeatherEntry.TABLE_NAME,
+                null, // all columns
+                null, // Columns for the "where" clause
+                null, // Values for the "where" clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null  // sort order
+        );
 
         // Move the cursor to a valid database row
+        assertTrue(cursor.moveToFirst());
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
+        TestUtilities.validateCurrentRecord("Cursor error", cursor, weatherValues);
+
+        assertFalse( "Error: More than one record returned from weather query", cursor.moveToNext() );
 
         // Finally, close the cursor and database
+        cursor.close();
+        db.close();
     }
 
 
@@ -187,7 +215,8 @@ public class TestDb extends AndroidTestCase {
         code from testLocationTable to here so that you can call this code from both
         testWeatherTable and testLocationTable.
      */
-    public long insertLocation() {
-        return -1L;
+    public long insertLocation(SQLiteDatabase db, ContentValues northPoleLocationValues) {
+        // Insert ContentValues into database and get a row ID back
+        return db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, northPoleLocationValues);
     }
 }
