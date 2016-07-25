@@ -265,6 +265,9 @@ public class WeatherProvider extends ContentProvider {
         // handle.  If it doesn't match these, throw an UnsupportedOperationException.
         final int match = sUriMatcher.match(uri);
         int rowsAffected = 0;
+        if(selection == null){
+            selection = "1";
+        }
 
         switch (match) {
             case WEATHER: {
@@ -310,6 +313,11 @@ public class WeatherProvider extends ContentProvider {
         int rowsAffected = 0;
 
         switch (match){
+            case WEATHER:
+                normalizeDate(values);
+                rowsAffected = db.update(WeatherContract.WeatherEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
+                break;
             case LOCATION:
                 rowsAffected = db.update(WeatherContract.LocationEntry.TABLE_NAME,
                         values, selection, selectionArgs);
@@ -318,7 +326,9 @@ public class WeatherProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        if(rowsAffected != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
         return rowsAffected;
     }
