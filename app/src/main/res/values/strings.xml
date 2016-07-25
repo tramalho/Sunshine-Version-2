@@ -13,7 +13,7 @@
 
     <string name="pref_location_key" translatable="false">pref_location_key</string>
     <string name="pref_location_label">Location</string>
-    <string name="pref_location_default" translatable="false">01001001</string>
+    <string name="pref_location_default" translatable="false">01001-001</string>
     <string name="pref_location_summary" >summary</string>
 
     <string name="pref_units_key" translatable="false">pref_units_key</string>
