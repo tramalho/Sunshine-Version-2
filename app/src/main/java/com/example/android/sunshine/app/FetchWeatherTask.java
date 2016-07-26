@@ -116,8 +116,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         Cursor cursor = mContext.getContentResolver()
                 .query(WeatherContract.LocationEntry.CONTENT_URI,
                         null,
-                        WeatherContract.LocationEntry.COLUMN_CITY_NAME + "=?",
-                        new String[]{cityName},
+                        WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + "=?",
+                        new String[]{locationSetting},
                         null);
 
 
@@ -135,6 +135,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             id = ContentUris.parseId(locationUri);
 
         }
+
+        cursor.close();
 
         return id;
     }
