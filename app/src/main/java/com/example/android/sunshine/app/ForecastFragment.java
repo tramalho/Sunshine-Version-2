@@ -44,7 +44,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
- //       updateWeather();
+        updateWeather();
     }
 
     @Override
