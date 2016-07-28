@@ -5,7 +5,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,17 +28,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A ForecastFragment fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment {
+public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
     private ForecastAdapter adapter;
-    private List<String> whetherList;
+    private final int LOADER_ID = 0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,14 +58,18 @@ public class ForecastFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        whetherList = new ArrayList<>();
-
         adapter = new ForecastAdapter(getActivity(), getDataFromDB(), 0);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecasts);
         listView.setAdapter(adapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private Cursor getDataFromDB(){
@@ -215,5 +222,20 @@ public class ForecastFragment extends Fragment {
         }
         return resultStrs;
 
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(), WeatherContract.WeatherEntry.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        adapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        adapter.swapCursor(null);
     }
 }
