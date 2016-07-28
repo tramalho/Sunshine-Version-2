@@ -1,12 +1,17 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,13 +59,16 @@ public class DetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class DetailFragment extends Fragment {
+    public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
         private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+        private static final int DETAIL_LOADER_ID = 1;
         private String mForecastStr;
+        private TextView textview;
 
         public DetailFragment() {
         }
@@ -79,14 +87,18 @@ public class DetailActivity extends ActionBarActivity {
             Intent intent = getActivity().getIntent();
             if (intent != null) {
                 mForecastStr = intent.getDataString();
+
             }
 
-            if(!TextUtils.isEmpty(mForecastStr)){
-                TextView textview = (TextView) rootView.findViewById(R.id.detail_text);
-                textview.setText(mForecastStr);
-            }
+            textview = (TextView) rootView.findViewById(R.id.detail_text);
 
             return rootView;
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            getLoaderManager().initLoader(DETAIL_LOADER_ID, null, this);
         }
 
         @Override
@@ -111,6 +123,26 @@ public class DetailActivity extends ActionBarActivity {
             sendIntent.setType("text/plain");
             sendIntent.putExtra(Intent.EXTRA_TEXT, this.mForecastStr + " #SunshineApp");
             return sendIntent;
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return new CursorLoader(getActivity(),
+                    Uri.parse(mForecastStr),
+                    ForecastFragment.FORECAST_COLUMNS,
+                    null,
+                    null,
+                    null);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            textview.setText(cursor.toString());
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
         }
     }
 }
