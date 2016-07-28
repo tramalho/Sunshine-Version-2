@@ -1,7 +1,8 @@
 package com.example.android.sunshine.app;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -13,10 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.android.sunshine.app.data.WeatherContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,13 +33,14 @@ import java.util.List;
 public class ForecastFragment extends Fragment {
 
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
-    private ArrayAdapter<String> adapter;
+    private ForecastAdapter adapter;
     private List<String> whetherList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -50,26 +52,29 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         whetherList = new ArrayList<>();
 
-        adapter = new ArrayAdapter<>(getActivity(),
-                R.layout.list_item_forecast, R.id.list_item_forecast_textview, whetherList);
+        adapter = new ForecastAdapter(getActivity(), getDataFromDB(), 0);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecasts);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String itemAtPosition = (String) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(Intent.EXTRA_TEXT, itemAtPosition);
-                startActivity(intent);
-            }
-        });
 
         return rootView;
+    }
+
+    private Cursor getDataFromDB(){
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        return getActivity().getContentResolver().query(weatherForLocationUri,
+                null, null, null, sortOrder);
     }
 
     @Override
@@ -95,7 +100,7 @@ public class ForecastFragment extends Fragment {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String locationPref = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
 
-        new FetchWeatherTask(getActivity(), adapter).execute(locationPref);
+        new FetchWeatherTask(getActivity()).execute(locationPref);
     }
 
     /* The date/time conversion code is going to be moved outside the asynctask later,
