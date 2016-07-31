@@ -42,11 +42,14 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         String preferredLocation = Utility.getPreferredLocation(this);
+
         if(!preferredLocation.equals(mLocation)){
+
             FragmentManager sfm = getSupportFragmentManager();
             ForecastFragment ff = (ForecastFragment)
                     sfm.findFragmentByTag(ForecastFragment.FORECASTFRAGMENT_TAG);
             ff.onLocationChanged();
+
             mLocation = preferredLocation;
         }
         Log.d(LOG_TAG, "onResume");

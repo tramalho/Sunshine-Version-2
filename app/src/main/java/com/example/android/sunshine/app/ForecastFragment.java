@@ -71,9 +71,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
-    public void onLocationChanged(){
+    void onLocationChanged(){
         updateWeather();
-        onCreateLoader(-1, null);
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
