@@ -29,6 +29,7 @@ import com.example.android.sunshine.app.data.WeatherContract;
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
+    public static final String FORECASTFRAGMENT_TAG = ForecastFragment.class.getSimpleName();
     private ForecastAdapter adapter;
     private static final int LOADER_ID = 0;
 
@@ -70,10 +71,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    public void onLocationChanged(){
         updateWeather();
+        onCreateLoader(-1, null);
     }
 
     @Override

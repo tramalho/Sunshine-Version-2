@@ -3,6 +3,7 @@ package com.example.android.sunshine.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -12,14 +13,18 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mLocation = Utility.getPreferredLocation(this);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new ForecastFragment(), ForecastFragment.FORECASTFRAGMENT_TAG)
                     .commit();
         }
 
@@ -36,6 +41,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        String preferredLocation = Utility.getPreferredLocation(this);
+        if(!preferredLocation.equals(mLocation)){
+            FragmentManager sfm = getSupportFragmentManager();
+            ForecastFragment ff = (ForecastFragment)
+                    sfm.findFragmentByTag(ForecastFragment.FORECASTFRAGMENT_TAG);
+            ff.onLocationChanged();
+            mLocation = preferredLocation;
+        }
         Log.d(LOG_TAG, "onResume");
     }
 
