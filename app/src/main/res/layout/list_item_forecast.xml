@@ -6,7 +6,8 @@
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
     android:id="@+id/list_item_forecast_container"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/default_list_item_padding">
 
     <ImageView
         android:id="@+id/list_item_icon"
@@ -15,31 +16,34 @@
         tools:src="@mipmap/ic_launcher"
         android:layout_gravity="center"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/list_item_middle_container"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/default_list_item_padding"
+        android:paddingStart="@dimen/default_list_item_padding"
         >
 
         <TextView
             android:id="@+id/list_item_date_textview"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="@string/app_name"/>
 
         <TextView
             android:id="@+id/list_item_forecast_textview"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/list_item_date_textview"
             tools:text="@string/abc_action_bar_home_description"/>
 
-    </RelativeLayout>
-    <RelativeLayout
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/list_item_bottom_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
 
         <TextView
@@ -47,18 +51,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="@string/action_map"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
             />
 
         <TextView
             android:id="@+id/list_item_low_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/list_item_high_textview"
-            android:layout_centerHorizontal="true"
             tools:text="@string/abc_action_bar_home_description"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
