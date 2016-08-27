@@ -13,7 +13,7 @@
 
     <string name="pref_location_key" translatable="false">pref_location_key</string>
     <string name="pref_location_label">Location</string>
-    <string name="pref_location_default" translatable="false">01001-001</string>
+    <string name="pref_location_default" translatable="false">01001–001</string>
     <string name="pref_location_summary" >summary</string>
 
     <string name="pref_units_key" translatable="false">pref_units_key</string>
@@ -34,8 +34,26 @@
     <!-- Date format for displaying day of week and date (i.e. Mon Jun 1) [CHAR LIMIT=20] -->
     <string name="format_full_friendly_date"><xliff:g id="day">%1$s</xliff:g>, <xliff:g id="date">%2$s</xliff:g></string>
 
-    <!-- Temperature formats in degrees [CHAR LIMIT=NONE] -->
+    <!-- Strings for formatting weather-related data -->
+    <!-- Temperature format [CHAR LIMIT=5] -->
     <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
+
+    <!-- Windspeed formats -->
+    <!-- Wind in mph [CHAR LIMIT=25] -->
+    <string name="format_wind_mph">
+        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> mph <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <!-- Wind in kph [CHAR LIMIT=25] -->
+    <string name="format_wind_kmh">
+        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> km/h <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <!-- Pressure format CHAR LIMIT=25] -->
+    <string name="format_pressure">Pressure: <xliff:g id="pressure">%1.0f</xliff:g> hPa</string>
+
+    <!-- Humidity format CHAR LIMIT=25]-->
+    <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
     <string-array name="pref_units_option">
         <item>@string/pref_units_metric</item>
