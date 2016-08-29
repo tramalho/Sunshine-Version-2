@@ -9,7 +9,9 @@
     tools:context=".ForecastFragment">
 
     <ListView
+        style="@style/ForecastListStyle"
         android:id="@+id/listview_forecast"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/touch_selector"/>
 </FrameLayout>
