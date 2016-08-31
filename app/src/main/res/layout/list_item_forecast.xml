@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/text_large"
             tools:text="@string/app_name"/>
 
         <TextView
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/text_small"
             tools:text="@string/abc_action_bar_home_description"/>
 
     </LinearLayout>
@@ -61,15 +63,18 @@
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/text_large"
             tools:text="@string/action_map"
             />
 
         <TextView
+
             android:id="@+id/list_item_low_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/text_small"
             android:layout_gravity="center_horizontal"
             tools:text="@string/abc_action_bar_home_description"/>
 
