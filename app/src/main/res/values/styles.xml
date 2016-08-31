@@ -27,7 +27,4 @@
         for two-pane layout -->
     </style>
 
-    <style name="TextLarge">
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-    </style>
 </resources>
