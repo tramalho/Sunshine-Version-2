@@ -58,7 +58,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String EXTRA_LAST_POSTION = "EXTRA_LAST_POSTION";
 
     private ForecastAdapter mForecastAdapter;
-    private int mLastPostion = 0;
+    private int mLastPostion = ListView.INVALID_POSITION;
     private ListView listView;
 
     /**
@@ -85,7 +85,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(EXTRA_LAST_POSTION, mLastPostion);
+
+        if(mLastPostion != ListView.INVALID_POSITION) {
+            outState.putInt(EXTRA_LAST_POSTION, mLastPostion);
+        }
+
         super.onSaveInstanceState(outState);
     }
 
@@ -185,7 +189,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mForecastAdapter.swapCursor(cursor);
-        listView.smoothScrollToPosition(mLastPostion);
+
+        if(mLastPostion != ListView.INVALID_POSITION){
+            listView.smoothScrollToPosition(mLastPostion);
+        }
     }
 
     @Override
