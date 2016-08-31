@@ -55,8 +55,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_CONDITION_ID = 6;
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
+    private static final String EXTRA_LAST_POSTION = "EXTRA_LAST_POSTION";
 
     private ForecastAdapter mForecastAdapter;
+    private int mLastPostion = 0;
+    private ListView listView;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -78,6 +81,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(EXTRA_LAST_POSTION, mLastPostion);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -107,7 +116,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
         // We'll call our MainActivity
@@ -124,9 +133,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                             .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                                     locationSetting, cursor.getLong(COL_WEATHER_DATE)
                             ));
+
                 }
+
+                mLastPostion = position;
             }
         });
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(EXTRA_LAST_POSTION)){
+            mLastPostion = savedInstanceState.getInt(EXTRA_LAST_POSTION);
+        }
+
         return rootView;
     }
 
@@ -168,6 +185,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mForecastAdapter.swapCursor(cursor);
+        listView.smoothScrollToPosition(mLastPostion);
     }
 
     @Override
