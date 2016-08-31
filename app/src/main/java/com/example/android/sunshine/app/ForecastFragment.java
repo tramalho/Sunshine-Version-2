@@ -202,6 +202,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if(mLastPostion != ListView.INVALID_POSITION){
             listView.smoothScrollToPosition(mLastPostion);
         }
+        else if(!useTodayLayout){
+            listView.post(new Runnable() {
+                @Override
+                public void run() {
+                    View childAt = listView.getChildAt(0);
+                    listView.performItemClick(childAt, 0, 0);
+                }
+            });
+        }
     }
 
     @Override
