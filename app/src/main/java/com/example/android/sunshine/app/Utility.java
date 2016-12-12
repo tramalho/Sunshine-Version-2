@@ -15,10 +15,17 @@
  */
 package com.example.android.sunshine.app;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
+
+import com.example.android.sunshine.app.service.SunshineService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -65,6 +72,7 @@ public class Utility {
      * @param dateInMillis The date in milliseconds
      * @return a user-friendly representation of the date.
      */
+    @SuppressLint("StringFormatMatches")
     public static String getFriendlyDayString(Context context, long dateInMillis) {
         // The day string for forecast uses the following logic:
         // For today: "Today, June 8"
@@ -243,5 +251,15 @@ public class Utility {
             return R.drawable.art_clouds;
         }
         return -1;
+    }
+
+    public static void schedulerAlarm(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, SunshineService.AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        5 * 1000, alarmIntent);
     }
 }

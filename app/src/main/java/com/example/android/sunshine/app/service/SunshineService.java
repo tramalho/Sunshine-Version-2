@@ -1,8 +1,10 @@
 package com.example.android.sunshine.app.service;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,6 +13,7 @@ import android.text.format.Time;
 import android.util.Log;
 
 import com.example.android.sunshine.app.BuildConfig;
+import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 
 import org.json.JSONArray;
@@ -322,4 +325,18 @@ public class SunshineService extends IntentService {
     }
 
 
+    public static  class  AlarmReceiver extends BroadcastReceiver{
+
+        private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_TAG, "onReceive");
+
+            Intent alarmIntent = new Intent(context, SunshineService.class);
+            alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,
+                    Utility.getPreferredLocation(context));
+            context.startService(alarmIntent);
+        }
+    }
 }
